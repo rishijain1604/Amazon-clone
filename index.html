@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- WELCOME POPUP -->
+<div id="welcome-overlay" class="overlay">
+    <div class="welcome-popup">
+        <button class="popup-close" id="close-welcome"><i class="fa-solid fa-xmark"></i></button>
+        <div class="welcome-logo"><img src="amazon_logo.png" alt="Amazon" style="width:140px;"></div>
+        <h2>Welcome to Amazon!</h2>
+        <p>Sign in for the best experience</p>
+        <div class="welcome-btns">
+            <button class="btn-primary" id="open-login-from-welcome">Sign In</button>
+            <button class="btn-secondary" id="continue-guest">Continue as Guest</button>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-overlay" class="overlay" style="display:none;">
+    <div class="login-popup">
+        <button class="popup-close" id="close-login"><i class="fa-solid fa-xmark"></i></button>
+        <div class="welcome-logo"><img src="amazon_logo.png" alt="Amazon" style="width:120px;"></div>
+        <div id="login-form-section">
+            <h2>Sign In</h2>
+            <input type="text" id="login-email" placeholder="Email or mobile number" class="form-input">
+            <input type="password" id="login-password" placeholder="Password" class="form-input">
+            <button class="btn-primary full-width" id="do-login">Sign In</button>
+            <p class="switch-form">New customer? <span id="go-register">Create your Amazon account</span></p>
+        </div>
+        <div id="register-form-section" style="display:none;">
+            <h2>Create Account</h2>
+            <input type="text" id="reg-name" placeholder="Your name" class="form-input">
+            <input type="text" id="reg-email" placeholder="Email or mobile number" class="form-input">
+            <input type="password" id="reg-password" placeholder="Password" class="form-input">
+            <button class="btn-primary full-width" id="do-register">Create your Amazon account</button>
+            <p class="switch-form">Already have an account? <span id="go-login">Sign in</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h3>Shopping Cart</h3>
+        <button id="close-cart"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="cart-items-list"></div>
+    <div class="cart-footer">
+        <div class="cart-total">Total: <span id="cart-total-price">₹0</span></div>
+        <button class="btn-primary full-width" id="checkout-btn">Proceed to Checkout</button>
+        <button class="btn-secondary full-width" id="clear-cart-btn" style="margin-top:8px;">Clear Cart</button>
+    </div>
+</div>
+<div id="cart-backdrop" class="backdrop"></div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="product-overlay" class="overlay" style="display:none;">
+    <div class="product-popup">
+        <button class="popup-close" id="close-product"><i class="fa-solid fa-xmark"></i></button>
+        <div class="product-popup-inner">
+            <div class="product-popup-img" id="popup-img"></div>
+            <div class="product-popup-info">
+                <span class="product-badge" id="popup-badge"></span>
+                <h2 id="popup-name"></h2>
+                <div class="popup-stars" id="popup-stars"></div>
+                <p class="popup-reviews" id="popup-reviews"></p>
+                <p class="popup-price" id="popup-price"></p>
+                <p class="popup-desc" id="popup-desc"></p>
+                <div class="popup-actions">
+                    <button class="btn-primary" id="popup-add-cart">Add to Cart</button>
+                    <button class="btn-wishlist" id="popup-add-wishlist"><i class="fa-solid fa-heart"></i> Wishlist</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LOCATION MODAL -->
+<div id="location-overlay" class="overlay" style="display:none;">
+    <div class="location-popup">
+        <button class="popup-close" id="close-location"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Choose your location</h2>
+        <p>Select a country or region</p>
+        <div class="location-grid">
+            <div class="location-item" data-location="India">🇮🇳 India</div>
+            <div class="location-item" data-location="United States">🇺🇸 United States</div>
+            <div class="location-item" data-location="United Kingdom">🇬🇧 United Kingdom</div>
+            <div class="location-item" data-location="Germany">🇩🇪 Germany</div>
+            <div class="location-item" data-location="Japan">🇯🇵 Japan</div>
+            <div class="location-item" data-location="Canada">🇨🇦 Canada</div>
+            <div class="location-item" data-location="Australia">🇦🇺 Australia</div>
+            <div class="location-item" data-location="UAE">🇦🇪 UAE</div>
+        </div>
+    </div>
+</div>
+
+<!-- ORDER TRACKING MODAL -->
+<div id="order-overlay" class="overlay" style="display:none;">
+    <div class="order-popup">
+        <button class="popup-close" id="close-order"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Your Orders</h2>
+        <div id="order-list"></div>
+    </div>
+</div>
+
+<!-- WISHLIST SIDEBAR -->
+<div id="wishlist-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+        <h3>My Wishlist <i class="fa-solid fa-heart" style="color:#e74c3c;"></i></h3>
+        <button id="close-wishlist"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="wishlist-items-list"></div>
+</div>
+<div id="wishlist-backdrop" class="backdrop"></div>
+
+<!-- FLOATING BACK TO TOP -->
+<button id="back-to-top-btn" class="back-to-top-btn" title="Back to Top">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- ════ HEADER ════ -->
+<header>
+    <div class="navbar">
+        <div class="nav-logo border">
+            <img src="amazon_logo.png" alt="Amazon" class="logo-img">
+        </div>
+
+        <div class="nav-address border" id="location-btn">
+            <p class="add-first">Deliver To</p>
+            <div class="add-icons">
+                <i class="fa-solid fa-location-dot"></i>
+                <p class="add-second" id="current-location">India</p>
+            </div>
+        </div>
+
+        <div class="nav-search border">
+            <select class="search-select" id="search-category">
+                <option value="all">All</option>
+                <option value="clothing">Clothing</option>
+                <option value="electronics">Electronics</option>
+                <option value="gaming">Gaming</option>
+                <option value="furniture">Furniture</option>
+                <option value="beauty">Beauty</option>
+                <option value="pets">Pets</option>
+            </select>
+            <div class="search-wrapper">
+                <input id="search-input" placeholder="Search Amazon" class="search-input" autocomplete="off">
+                <div id="search-suggestions" class="search-suggestions"></div>
+            </div>
+            <div class="search-icon" id="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div class="voice-search-btn" id="voice-btn" title="Voice Search">
+                <i class="fa-solid fa-microphone"></i>
+            </div>
+        </div>
+
+        <div class="nav-singin border" id="account-btn">
+            <p><span id="greeting-text">Hello, sign in</span></p>
+            <p class="nav-second">Account & Lists <i class="fa-solid fa-caret-down"></i></p>
+            <div class="account-dropdown" id="account-dropdown">
+                <div id="dropdown-auth-section">
+                    <button class="btn-primary full-width" id="dropdown-signin">Sign In</button>
+                    <p style="font-size:0.75rem;margin-top:8px;">New customer? <span class="link-text" id="dropdown-register">Start here</span></p>
+                </div>
+                <hr style="margin:10px 0;border-color:#ddd;">
+                <p class="dropdown-heading">Your Lists</p>
+                <p class="dropdown-item" id="open-wishlist-dropdown"><i class="fa-solid fa-heart"></i> Wishlist <span id="wishlist-badge-dd" class="mini-badge">0</span></p>
+                <p class="dropdown-item" id="open-orders-dropdown"><i class="fa-solid fa-box"></i> Your Orders</p>
+                <p class="dropdown-item" id="toggle-dark-dropdown"><i class="fa-solid fa-moon"></i> Dark Mode</p>
+                <p class="dropdown-item" id="logout-btn" style="display:none;"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</p>
+            </div>
+        </div>
+
+        <div class="nav-return border" id="orders-nav-btn">
+            <p><span>Returns</span></p>
+            <p class="nav-second">& Orders</p>
+        </div>
+
+        <div class="nav-cart border" id="cart-btn">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="cart-count">0</span>
+            Cart
+        </div>
+
+        <div class="nav-wishlist border" id="wishlist-nav-btn">
+            <i class="fa-solid fa-heart"></i>
+            <span id="wishlist-count">0</span>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-all border">
+            <i class="fa-solid fa-bars"></i> All
+        </div>
+        <div class="panel-ops">
+            <p class="filter-btn active" data-cat="all">All Products</p>
+            <p class="filter-btn" data-cat="clothing">Clothing</p>
+            <p class="filter-btn" data-cat="electronics">Electronics</p>
+            <p class="filter-btn" data-cat="gaming">Gaming</p>
+            <p class="filter-btn" data-cat="furniture">Furniture</p>
+            <p class="filter-btn" data-cat="beauty">Beauty</p>
+            <p class="filter-btn" data-cat="pets">Pets</p>
+        </div>
+        <div class="panel-right">
+            <div class="deals-timer">🔥 Deal ends in: <span id="timer-display">00:00:00</span></div>
+            <select id="sort-select" class="sort-select">
+                <option value="default">Sort: Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
+            </select>
+        </div>
+    </div>
+</header>
+
+<!-- ════ HERO SLIDER ════ -->
+<div class="hero-slider" id="hero-slider">
+    <div class="slide active" style="background-image:url('hero_image.jpg'); background-size:cover; background-position:center;">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+            <h1>Find Gifts for Everyone</h1>
+            <p>Millions of products, fast delivery</p>
+            <button class="slide-btn" data-cat="electronics">Shop Now</button>
+        </div>
+    </div>
+    <div class="slide" style="background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%);">
+        <div class="slide-content">
+            <h1>Biggest Sale of the Year</h1>
+            <p>Up to 70% off on Electronics</p>
+            <button class="slide-btn" data-cat="electronics">Shop Electronics</button>
+        </div>
+    </div>
+    <div class="slide" style="background:linear-gradient(135deg,#2d1b69 0%,#11998e 100%);">
+        <div class="slide-content">
+            <h1>Fashion Week Deals</h1>
+            <p>Latest trends at unbeatable prices</p>
+            <button class="slide-btn" data-cat="clothing">Shop Fashion</button>
+        </div>
+    </div>
+    <div class="slide" style="background:linear-gradient(135deg,#c94b4b 0%,#4b134f 100%);">
+        <div class="slide-content">
+            <h1>Gaming Festival</h1>
+            <p>Level up with top gaming gear</p>
+            <button class="slide-btn" data-cat="gaming">Shop Gaming</button>
+        </div>
+    </div>
+    <button class="slider-btn prev" id="slide-prev"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="slider-btn next" id="slide-next"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="slider-dots" id="slider-dots"></div>
+</div>
+
+<!-- ════ SHOP BY CATEGORY (YOUR IMAGES) ════ -->
+<div class="shop-section">
+    <div class="shop-section-header">
+        <h2>Shop by Category</h2>
+    </div>
+    <div class="shop-grid">
+        <div class="box" data-cat="clothing">
+            <div class="box-content">
+                <h2>Clothes</h2>
+                <div class="box-img" style="background-image:url('box1_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="gaming">
+            <div class="box-content">
+                <h2>Gaming</h2>
+                <div class="box-img" style="background-image:url('box2_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="furniture">
+            <div class="box-content">
+                <h2>Furniture</h2>
+                <div class="box-img" style="background-image:url('box3_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="electronics">
+            <div class="box-content">
+                <h2>Electronics</h2>
+                <div class="box-img" style="background-image:url('box4_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="beauty">
+            <div class="box-content">
+                <h2>Beauty Products</h2>
+                <div class="box-img" style="background-image:url('box5_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="pets">
+            <div class="box-content">
+                <h2>Pets</h2>
+                <div class="box-img" style="background-image:url('box6_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="all">
+            <div class="box-content">
+                <h2>New Arrivals</h2>
+                <div class="box-img" style="background-image:url('box7_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+        <div class="box" data-cat="clothing">
+            <div class="box-content">
+                <h2>Fashion Trends</h2>
+                <div class="box-img" style="background-image:url('box8_image.jpg');"></div>
+                <p class="see-more">See more <i class="fa-solid fa-arrow-right"></i></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ════ SEARCH RESULTS ════ -->
+<div id="search-results-section" style="display:none;">
+    <div class="section-header">
+        <h2 id="search-results-title">Search Results</h2>
+        <button id="clear-search-btn" class="btn-secondary">✕ Clear Search</button>
+    </div>
+    <div class="products-grid" id="search-results-grid"></div>
+</div>
+
+<!-- ════ PRODUCTS SECTION ════ -->
+<div class="products-section" id="products-section">
+    <div class="section-header">
+        <h2 id="section-title">Featured Products</h2>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+    <div id="no-products" class="no-products" style="display:none;">
+        <i class="fa-solid fa-box-open"></i>
+        <p>No products found</p>
+    </div>
+    <div class="pagination" id="pagination"></div>
+</div>
+
+<!-- ════ RECENTLY VIEWED ════ -->
+<div class="recently-viewed" id="recently-viewed-section" style="display:none;">
+    <div class="section-header"><h2>🕐 Recently Viewed</h2></div>
+    <div class="products-grid" id="recently-viewed-grid"></div>
+</div>
+
+<!-- ════ FOOTER ════ -->
+<footer>
+    <div class="foot-panel1" id="back-to-top">
+        <i class="fa-solid fa-chevron-up"></i> Back to Top
+    </div>
+    <div class="foot-panel2">
+        <ul>
+            <li class="foot-heading">Get to Know Us</li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">About Amazon</a></li>
+            <li><a href="#">Investor Relations</a></li>
+            <li><a href="#">Amazon Devices</a></li>
+            <li><a href="#">Amazon Science</a></li>
+        </ul>
+        <ul>
+            <li class="foot-heading">Make Money with Us</li>
+            <li><a href="#">Sell on Amazon</a></li>
+            <li><a href="#">Sell on Amazon Business</a></li>
+            <li><a href="#">Become an Affiliate</a></li>
+            <li><a href="#">Advertise Your Products</a></li>
+        </ul>
+        <ul>
+            <li class="foot-heading">Amazon Payment Products</li>
+            <li><a href="#">Amazon Business Card</a></li>
+            <li><a href="#">Shop with Points</a></li>
+            <li><a href="#">Reload Your Balance</a></li>
+            <li><a href="#">Amazon Currency Converter</a></li>
+        </ul>
+        <ul>
+            <li class="foot-heading">Let Us Help You</li>
+            <li><a href="#">Your Account</a></li>
+            <li><a href="#">Your Orders</a></li>
+            <li><a href="#">Shipping Rates & Policies</a></li>
+            <li><a href="#">Returns & Replacements</a></li>
+            <li><a href="#">Help</a></li>
+        </ul>
+    </div>
+    <div class="foot-panel3">
+        <img src="amazon_logo.png" alt="Amazon" style="height:45px;">
+    </div>
+    <div class="foot-panel4">
+        <div class="pages">
+            <a href="#">Conditions of Use</a>
+            <a href="#">Privacy Notice</a>
+            <a href="#">Your Ads Privacy Choices</a>
+        </div>
+        <div class="copyright">&copy; 1996-2025, Amazon.com, Inc. or its affiliates</div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
