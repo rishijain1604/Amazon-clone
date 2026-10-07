@@ -1,15 +1,19 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
+  "outputDirectory": ".",
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+    { "src": "/style.css", "dest": "/style.css" },
+    { "src": "/script.js", "dest": "/script.js" },
+    { "src": "/amazon_logo.png", "dest": "/amazon_logo.png" },
+    { "src": "/hero_image.jpg", "dest": "/hero_image.jpg" },
+    { "src": "/box1_image.jpg", "dest": "/box1_image.jpg" },
+    { "src": "/box2_image.jpg", "dest": "/box2_image.jpg" },
+    { "src": "/box3_image.jpg", "dest": "/box3_image.jpg" },
+    { "src": "/box4_image.jpg", "dest": "/box4_image.jpg" },
+    { "src": "/box5_image.jpg", "dest": "/box5_image.jpg" },
+    { "src": "/box6_image.jpg", "dest": "/box6_image.jpg" },
+    { "src": "/box7_image.jpg", "dest": "/box7_image.jpg" },
+    { "src": "/box8_image.jpg", "dest": "/box8_image.jpg" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
